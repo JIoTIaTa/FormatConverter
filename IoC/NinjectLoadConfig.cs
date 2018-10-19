@@ -19,7 +19,7 @@ namespace ObserverReaderWriter.IoC
     {
         private string userDocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
         private string formSettingsFileName = "parameters.dat";
-        private string formSettingsDirectoryName = "Observer Convertor";
+        private string formSettingsDirectoryName = "Format Converter";
         private string fullFilePathWithExtentions = null;
 
         public NinjectLoadConfig()

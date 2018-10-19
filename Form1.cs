@@ -28,7 +28,7 @@ namespace ObserverReaderWriter
         private ConvertorParams _convertorParams;
         private string userDocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
         private string formSettingsFileName = "parameters.dat";
-        private string formSettingsDirectoryName = "Observer Convertor";
+        private string formSettingsDirectoryName = "Format Converter";
         
 
         public Form1(ConvertorParams convertorParams)
@@ -165,7 +165,7 @@ namespace ObserverReaderWriter
             saveFileDialog.Filter = formatsToFilter;
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
-                this.textBox_Write.Text = _convertorParams.WriteFilePath =  $"{Path.GetDirectoryName(saveFileDialog.FileName)}\\{Path.GetFileNameWithoutExtension(saveFileDialog.FileName)}"; ;
+                this.textBox_Write.Text = $"{Path.GetDirectoryName(saveFileDialog.FileName)}\\{Path.GetFileNameWithoutExtension(saveFileDialog.FileName)}"; ;
             }
         }
 
@@ -206,6 +206,11 @@ namespace ObserverReaderWriter
         private void toolStripComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             _convertorParams.HandlerType = (HandlerType)toolStripComboBox1.SelectedItem;
+        }
+
+        private void textBox_Write_TextChanged(object sender, EventArgs e)
+        {
+            _convertorParams.WriteFilePath = textBox_Write.Text;
         }
     }
 }

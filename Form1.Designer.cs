@@ -84,9 +84,9 @@
             // 
             this.textBox_Write.Location = new System.Drawing.Point(94, 33);
             this.textBox_Write.Name = "textBox_Write";
-            this.textBox_Write.ReadOnly = true;
             this.textBox_Write.Size = new System.Drawing.Size(315, 20);
             this.textBox_Write.TabIndex = 5;
+            this.textBox_Write.TextChanged += new System.EventHandler(this.textBox_Write_TextChanged);
             // 
             // button_Write
             // 
