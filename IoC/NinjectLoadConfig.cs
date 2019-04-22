@@ -67,7 +67,7 @@ namespace ObserverReaderWriter.IoC
         }
     }
 
-    class NinjectReaderConfig : NinjectModule
+    class NinjectConverterConfig : NinjectModule
     {
         private string _readFilePath;
         private FileExtention _readFileExtention = FileExtention.uknown;
@@ -75,7 +75,7 @@ namespace ObserverReaderWriter.IoC
         private FileExtention _writeFileExtention = FileExtention.uknown;
         private HandlerType _handlerType = HandlerType.none;
 
-        public NinjectReaderConfig(ConvertorParams convertorParams)
+        public NinjectConverterConfig(ConvertorParams convertorParams)
         {
             _readFileExtention = convertorParams.ReadFileExtention;
             _readFilePath = convertorParams.ReadFilePath;
@@ -90,6 +90,7 @@ namespace ObserverReaderWriter.IoC
             Bind<BaseFileReader>().ToMethod(context => readerType(_readFileExtention, _readFilePath));
             Bind<BaseFileWriter>().ToMethod(context => writerType(_writeFileExtention, _writeFilePath));
             Bind<IHandler>().ToMethod(context => handlerType(_handlerType));
+            Bind<ConvetrerWorker>().ToSelf();
         }
         private BaseFileReader readerType(FileExtention fileExtention, string filePath)
         {
@@ -111,22 +112,23 @@ namespace ObserverReaderWriter.IoC
 
             }
         }
-        private BaseFileWriter writerType(FileExtention fileExtention, string FilePath)
+        private BaseFileWriter writerType(FileExtention fileExtention, string filePath)
         {
+            string fullFileNameWithExtentions = $"{filePath}{fileExtention.GetFileExtension()}";
             switch (fileExtention)
             {
                 case FileExtention.dat:
-                    return new BaseFileWriter(FilePath);
+                    return new BaseFileWriter(fullFileNameWithExtentions);
                 case FileExtention.dpo:
-                    return new DpoFileWriter(FilePath);
+                    return new DpoFileWriter(fullFileNameWithExtentions);
                 case FileExtention.ipf:
-                    return new IpfFileWriter(FilePath);
+                    return new IpfFileWriter(fullFileNameWithExtentions);
                 case FileExtention.pcap:
-                    return new PcapWriter(FilePath,0);
+                    return new PcapWriter(fullFileNameWithExtentions, 0);
                 case FileExtention.sig:
-                    return new SigFileWriter(FilePath);
+                    return new SigFileWriter(fullFileNameWithExtentions);
                 default:
-                    return new BaseFileWriter(FilePath);
+                    return new BaseFileWriter(fullFileNameWithExtentions);
 
             }
         }

@@ -18,22 +18,22 @@ namespace Observer.Reader
 
         public override byte[] ReadNextBuff()
         {
-            var low1 = (ushort)this.FileStream.ReadByte();
-            var high1 = (ushort)this.FileStream.ReadByte();
+            var low1 = (ushort)this.fileStream.ReadByte();
+            var high1 = (ushort)this.fileStream.ReadByte();
             int count = low1 + (high1 << 8);
             var outData = new byte[count];
-            int i = this.FileStream.Read(outData, 0, count);
+            int i = this.fileStream.Read(outData, 0, count);
             if (i <= 0)
             {
                 fileLengthReaded = 0;
-                ReadProgress.Invoke(fileLength, fileLength);
+                ReadProgress?.Invoke(fileLength, fileLength);
                 return null;
             }
 
             var temp = new byte[outData.Length - 2];
             Buffer.BlockCopy(outData, 2, temp, 0, temp.Length);
             fileLengthReaded += outData.Length;
-            ReadProgress.Invoke(fileLengthReaded, fileLength);
+            ReadProgress?.Invoke(fileLengthReaded, fileLength);
             return temp;
         }
 

@@ -32,10 +32,10 @@ namespace Observer.Reader
         public override byte[] ReadNextBuff()
         {
             this.bytePacket = new byte[LengthHeader];
-            this.FileStream.Read(this.bytePacket, 0, LengthHeader);
+            this.fileStream.Read(this.bytePacket, 0, LengthHeader);
             byte[] packet = this.GetPacketData();
             fileLengthReaded += packet.Length;
-            ReadProgress.Invoke(fileLengthReaded, fileLength);
+            ReadProgress?.Invoke(fileLengthReaded, fileLength);
             return packet;
         }
 
@@ -45,17 +45,17 @@ namespace Observer.Reader
 
         private byte[] GetPacketData()
         {
-            int length = this.FileStream.ReadByte();
-            length += this.FileStream.ReadByte() << 8;
-            length += this.FileStream.ReadByte() << 16;
+            int length = this.fileStream.ReadByte();
+            length += this.fileStream.ReadByte() << 8;
+            length += this.fileStream.ReadByte() << 16;
             if (length < 0)
             {
                 return null;
             }
 
-            int tagbyte = this.FileStream.ReadByte();
+            int tagbyte = this.fileStream.ReadByte();
             this.bytePacket = new byte[length];
-            this.FileStream.Read(this.bytePacket, 0, length);
+            this.fileStream.Read(this.bytePacket, 0, length);
 
             return tagbyte == 0 ? this.bytePacket : new byte[0];
         }

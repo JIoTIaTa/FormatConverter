@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConvetrerWorker.cs" />
     <Compile Include="EnumAtributes\BaseAtribute.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -93,6 +94,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="packages.config" />
     <None Include="Params\parameters.dat" />
@@ -111,6 +113,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="converter.ico" />
+    <None Include="Resources\icons8-checked-48.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

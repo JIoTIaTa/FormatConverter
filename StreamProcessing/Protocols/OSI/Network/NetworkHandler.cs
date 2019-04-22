@@ -12,10 +12,11 @@ namespace ObserverReaderWriter.StreamProcessing.Protocols.OSI.Network
             byte[][] result = null;
             using (SearchIpPacket searchIp = new SearchIpPacket() {IsBuffer = true, CheckChecksum = true})
             {
-                var temp = searchIp.Shearch(inData);
-                result = temp.ToArray();
+                //var temp = searchIp.Shearch(inData);
+                //result = temp.ToArray();
+                result = searchIp.Shearch(inData).ToArray();
             }
-            return result;
+            return (result.Length != 0)? result : null;
         }
     }
 }

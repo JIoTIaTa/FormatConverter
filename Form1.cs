@@ -17,6 +17,7 @@ using Observer.Writer;
 using ObserverReaderWriter.IoC;
 using ObserverReaderWriter.Reader;
 using ObserverReaderWriter.StreamProcessing;
+using ObserverReaderWriter.Writer;
 using Serialization;
 
 namespace ObserverReaderWriter
@@ -29,6 +30,12 @@ namespace ObserverReaderWriter
         private string userDocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
         private string formSettingsFileName = "parameters.dat";
         private string formSettingsDirectoryName = "Format Converter";
+        private bool isHandleWork = false;
+
+        //test
+        private BaseFileReader fileReader;
+        private IHandler fileHandler;
+        private BaseFileWriter fileWriter;
         
 
         public Form1(ConvertorParams convertorParams)
@@ -54,7 +61,6 @@ namespace ObserverReaderWriter
             Size = _convertorParams.WindowSize;
             Location = _convertorParams.WindowLocationPoint;
             toolStripComboBox1.SelectedItem = _convertorParams.HandlerType;
-
             #endregion
 
         }
@@ -77,59 +83,29 @@ namespace ObserverReaderWriter
 
         private void button_Convert_Click(object sender, EventArgs e)
         {
-            iocConvertorKernel = new StandardKernel(new NinjectReaderConfig(_convertorParams));
+            iocConvertorKernel = new StandardKernel(new NinjectConverterConfig(_convertorParams));
 
-            using (BaseFileReader fileReader = iocConvertorKernel.Get<BaseFileReader>())
-            {
-                using (BaseFileWriter fileWriter = iocConvertorKernel.Get<BaseFileWriter>())
-                {
-                    IHandler handler = iocConvertorKernel.Get<IHandler>(); // обробка потоку
-                    fileReader.ReadProgress += ReadingProgress;
-                    fileWriter.CreateNewFileToWrite($"{_convertorParams.WriteFilePath}{_convertorParams.WriteFileExtention.GetFileExtension()}");
-                    byte[] readedData;
-                    do
-                    {
-                        if (!fileReader.CloseFile)
-                        {
-                            readedData = fileReader.ReadNextBuff();
-                            if (readedData != null)
-                            {
-                                byte[][] processedData = handler.Process(readedData); 
-                                if (processedData != null)
-                                {
-                                    foreach (byte[] frame in processedData)
-                                    {
-                                        fileWriter.WriteToFile(frame);
-                                    }
-                                }
-                                else
-                                {
-                                    fileWriter.WriteToFile(readedData);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            fileReader.CloseReading();
-                            fileWriter.CloseWriting();
-                            readedData = null;
-                        }
-                    } while (readedData != null);
-                    fileReader.CloseReading();
-                    fileWriter.CloseWriting();
-                }
-            }
+            ConvetrerWorker convetrerWorker = iocConvertorKernel.Get<ConvetrerWorker>();
+            convetrerWorker.ConvertProgress += ReadingProgress;
+            convetrerWorker.HandlerSucces += ConvetrerOnHandlerSucces;
+           
+            convetrerWorker.Convert();
         }
 
-        private void processing(byte[] data)
+        private void ConvetrerOnHandlerSucces(bool obj)
         {
-
+            isHandleWork = obj;
         }
 
         private void ReadingProgress(long progress, long length)
         {
+            
             toolStripProgressBar1.Maximum = (int)length;
             toolStripProgressBar1.Value = (int) progress;
+            if (progress == length)
+            {
+                pictureBox1.Image = (isHandleWork) ? imageList1.Images[0] : imageList1.Images[1];
+            }
         }
 
         /// <summary>
@@ -146,6 +122,7 @@ namespace ObserverReaderWriter
             string formSettingsFullPath = Path.Combine(userDocumentsPath, formSettingsDirectoryName, formSettingsFileName);
             Serializator.Write(_convertorParams, formSettingsFullPath);
         }
+
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             writeConfigFile();
@@ -184,6 +161,7 @@ namespace ObserverReaderWriter
             }
             textBox_readExt.Text = _convertorParams.ReadFileExtention.ToString();
         }
+
         private void comboBox_writeExt_SelectedIndexChanged(object sender, EventArgs e)
         {
             _convertorParams.WriteFileExtention = (FileExtention)comboBox_writeExt.SelectedItem;
@@ -211,6 +189,16 @@ namespace ObserverReaderWriter
         private void textBox_Write_TextChanged(object sender, EventArgs e)
         {
             _convertorParams.WriteFilePath = textBox_Write.Text;
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            ToolTip tip1 = new ToolTip();
+            tip1.AutoPopDelay = 10000;
+            tip1.InitialDelay = 1000;
+            tip1.ReshowDelay = 500;
+            tip1.ShowAlways = true;
+            tip1.SetToolTip(pictureBox1, "The success of the processing algorithm");
         }
     }
 }

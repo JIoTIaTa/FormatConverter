@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.button_Read = new System.Windows.Forms.Button();
@@ -42,7 +43,10 @@
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
+            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.toolStrip_convertProgress.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -72,7 +76,7 @@
             // 
             // button_Convert
             // 
-            this.button_Convert.Location = new System.Drawing.Point(12, 58);
+            this.button_Convert.Location = new System.Drawing.Point(13, 59);
             this.button_Convert.Name = "button_Convert";
             this.button_Convert.Size = new System.Drawing.Size(460, 23);
             this.button_Convert.TabIndex = 3;
@@ -146,9 +150,28 @@
             // 
             // toolStripComboBox1
             // 
+            this.toolStripComboBox1.BackColor = System.Drawing.SystemColors.Window;
             this.toolStripComboBox1.Name = "toolStripComboBox1";
             this.toolStripComboBox1.Size = new System.Drawing.Size(121, 27);
             this.toolStripComboBox1.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox1_SelectedIndexChanged);
+            // 
+            // imageList1
+            // 
+            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
+            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList1.Images.SetKeyName(0, "icons8-checked-48.png");
+            this.imageList1.Images.SetKeyName(1, "dead.png");
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.InitialImage = global::ObserverReaderWriter.Properties.Resources.icons8_checked_48;
+            this.pictureBox1.Location = new System.Drawing.Point(460, 84);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(24, 27);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.pictureBox1.TabIndex = 11;
+            this.pictureBox1.TabStop = false;
+            this.pictureBox1.WaitOnLoad = true;
             // 
             // Form1
             // 
@@ -156,6 +179,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(484, 111);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.toolStrip_convertProgress);
             this.Controls.Add(this.comboBox_writeExt);
             this.Controls.Add(this.textBox_readExt);
@@ -170,8 +194,10 @@
             this.Name = "Form1";
             this.Text = "Format Convertor";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.toolStrip_convertProgress.ResumeLayout(false);
             this.toolStrip_convertProgress.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -192,6 +218,8 @@
         private System.Windows.Forms.ToolStripLabel toolStripLabel1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripComboBox toolStripComboBox1;
+        private System.Windows.Forms.ImageList imageList1;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 

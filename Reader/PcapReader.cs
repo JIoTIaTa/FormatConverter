@@ -39,7 +39,7 @@ namespace Observer.Reader
             if (!this.start)
             {
                 this.bytePacket = new byte[LengthHeader];
-                this.FileStream.Read(this.bytePacket, 0, LengthHeader);
+                this.fileStream.Read(this.bytePacket, 0, LengthHeader);
                 this.start = true;
             }
 
@@ -47,16 +47,16 @@ namespace Observer.Reader
             if (length == 0)
             {
                 fileLengthReaded = 0;
-                ReadProgress.Invoke(fileLength, fileLength);
+                ReadProgress?.Invoke(fileLength, fileLength);
                 return null;
             }
 
             var packet = new byte[length];
-            this.FileStream.Read(packet, 0, length);
+            this.fileStream.Read(packet, 0, length);
             var data = new byte[length - 16];
             System.Buffer.BlockCopy(packet, 16, data, 0, data.Length);
             fileLengthReaded += packet.Length;
-            ReadProgress.Invoke(fileLengthReaded, fileLength);
+            ReadProgress?.Invoke(fileLengthReaded, fileLength);
             return packet;
         }
 
@@ -67,7 +67,7 @@ namespace Observer.Reader
         private int GetLengthPacket()
         {
             var headerPcap = new byte[16];
-            this.FileStream.Read(headerPcap, 0, 16);
+            this.fileStream.Read(headerPcap, 0, 16);
             int length = headerPcap[8];
             length += headerPcap[9] << 8;
             return length;

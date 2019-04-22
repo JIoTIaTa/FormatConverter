@@ -19,6 +19,7 @@ namespace Observer.Writer
         protected string TempName;
 
         public virtual event Action<long> WriteProgress;
+        public virtual event Action BufferWrited;
 
 
         #endregion
@@ -117,6 +118,16 @@ namespace Observer.Writer
             if (!this.FileClosed && this.BufferedOutput != null && this.BufferedOutput.CanWrite)
             {
                 this.BufferedOutput.Write(preparedData, 0, preparedData.Length);
+            }
+        }
+
+        public virtual async void WriteToFileAsync(byte[] data)
+        {
+            byte[] preparedData = this.PrepareDataToWrite(data);
+            if (!this.FileClosed && this.BufferedOutput != null && this.BufferedOutput.CanWrite)
+            {
+               await this.BufferedOutput.WriteAsync(preparedData, 0, preparedData.Length);
+                BufferWrited?.Invoke();
             }
         }
 

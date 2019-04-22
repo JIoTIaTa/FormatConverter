@@ -12,7 +12,9 @@ namespace ObserverReaderWriter.StreamProcessing
 
         public byte[][] Process(byte[] inData)
         {
-            return null;
+            byte[][] result = new byte[1][];
+            result[0] = inData;
+            return result;
         }
     }
 }
